@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import '../App.scss';
 import { Game } from '../types/game';
 
-
 interface MainAppProps {
   games: Game[];
 }
