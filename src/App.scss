@@ -440,12 +440,6 @@ body {
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -541,4 +535,29 @@ body {
   outline-color: #FFA500;
   color: #333;
   margin-bottom: 0rem;
+}
+
+/* Default styles for larger screens */
+.main-app .games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .main-app .games-grid {
+    grid-template-columns: repeat(1, 1fr); // Single column layout for mobile
+  }
+
+  .main-app .game-card {
+    flex-direction: column; // Stack image above text
+
+    .game-cover {
+      width: 100%;
+      height: auto; // Maintain aspect ratio
+      border-radius: 8px 8px 0 0; // Adjust border radius for top corners
+    }
+  }
 } 
