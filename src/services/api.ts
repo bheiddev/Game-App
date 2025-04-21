@@ -1,6 +1,6 @@
 import { Game, OAuthResponse } from '../types/game';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = 'https://game-backend-7ga1.onrender.com/api';
 
 export const fetchTopRatedGames = async (): Promise<Game[]> => {
   try {
@@ -26,7 +26,7 @@ export const fetchTopRatedGames = async (): Promise<Game[]> => {
 
 export const initiateOAuthFlow = (): void => {
   const clientId = process.env.REACT_APP_IGDB_CLIENT_ID;
-  const redirectUri = process.env.REACT_APP_OAUTH_REDIRECT_URI || 'http://localhost:3000';
+  const redirectUri = 'https://game-backend-7ga1.onrender.com';
   const scope = 'user:read:email'; // Add any required scopes
 
   const authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
