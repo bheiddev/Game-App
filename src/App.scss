@@ -308,13 +308,12 @@ body {
     }
 
     .game-card {
-      flex-direction: column;
+      flex-direction: row;
 
       .game-cover {
-        width: 100%;
-        height: 150px;
-        border-radius: 8px 8px 0 0;
-        object-fit: cover;
+        width: 200px;
+        height: auto;
+        border-radius: 8px 0 0 8px;
       }
 
       .game-info {
@@ -355,6 +354,21 @@ body {
       padding: 1rem;
     }
   }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    h1 {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-app .games-grid {
+    grid-template-columns: repeat(2, 1fr); // Two column layout for tablets
+  }
 }
 
 .header {
@@ -391,13 +405,24 @@ body {
     grid-template-columns: repeat(1, 1fr); // Single column layout for mobile
   }
 
-  .main-app .game-card {
-    flex-direction: column; // Stack image above text
+  .main-app h1 {
+    font-size: 2.5rem;
+    font-family: 'Space Grotesk', sans-serif;
+    color: $primary-color;
+    margin-bottom: 1.25rem;
+    text-align: center;
+  }
 
-    .game-cover {
-      width: 100%;
-      height: 450px; // Maintain aspect ratio
+  .main-app .game-cover {
+    width: 100%;
+      height: auto; // Maintain aspect ratio
       border-radius: 8px 8px 0 0; // Adjust border radius for top corners
-    }
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-app .games-grid {
+    grid-template-columns: repeat(2, 1fr); // Two column layout for tablets
   }
 }
