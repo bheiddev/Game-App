@@ -2,6 +2,8 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Game } from '../types/game';
 import '../App.scss';
+import '../GameDetail.scss';
+import '../GameCard.scss';
 
 interface GameDetailsProps {
   games: Game[];

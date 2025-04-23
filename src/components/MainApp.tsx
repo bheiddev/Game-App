@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../App.scss';
 import { Game } from '../types/game';
+import '../GameGrid.scss';
 
 interface MainAppProps {
   games: Game[];
 }
 
+//MainApp component that handles props and states for games grid and search
 const MainApp: React.FC<MainAppProps> = ({ games }) => {
   const navigate = useNavigate();
 
@@ -17,10 +19,12 @@ const MainApp: React.FC<MainAppProps> = ({ games }) => {
     return matchesSearch;
   });
 
+  //when the user clicks a game it navigates to the game details page using game id
   const handleGameClick = (gameId: number) => {
     navigate(`/game/${gameId}`);
   };
 
+  //formats date to readable format
   const formatDate = (dateString: string) => {
     console.log('Raw date string:', dateString);
     try {
@@ -33,10 +37,11 @@ const MainApp: React.FC<MainAppProps> = ({ games }) => {
     }
   };
 
+//MainApp components
   return (
     <div className="main-app">
       <div className="header">
-        <h1>Indie Video Games</h1>
+        <h1>Best New Indie Games</h1>
         <input
           type="text"
           placeholder="Search games..."

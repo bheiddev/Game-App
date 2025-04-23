@@ -1,0 +1,103 @@
+$background-color: #FDFBEE;
+$primary-color: #015551;
+$accent-color: #57B4BA;
+$highlight-color: #FE4F2D;
+$card-bg: rgba(1, 85, 81, 0.05);
+$card-hover: rgba(1, 85, 81, 0.1);
+$text-color: #015551;
+$text-muted: rgba(1, 85, 81, 0.7);
+
+@mixin card-shadow {
+    box-shadow: 0 4px 6px rgba(1, 85, 81, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .game-card {
+    background-color: $card-bg;
+    border-radius: 8px;
+    overflow: hidden;
+    @include card-shadow;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    border: 1px solid rgba(1, 85, 81, 0.1);
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(1, 85, 81, 0.15);
+      border-color: #FFA500;
+      outline: 2px solid #FFA500;
+    }
+
+    .game-cover {
+      width: 200px;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      background-color: $card-bg;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .game-info {
+      padding: 1rem;
+      text-align: left;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      h2 {
+        margin: 0 0 0.1rem 0;
+        font-size: 1.25rem;
+        font-family: 'Space Grotesk', sans-serif;
+        color: $primary-color;
+      }
+
+      .rating {
+        color: $highlight-color;
+        font-weight: bold;
+        margin: 0 0 0.1rem 0;
+      }
+
+      .release-date {
+        color: $text-muted;
+        margin: 0 0 0.5rem 0;
+      }
+
+      .genres, .platforms {
+        color: $text-color;
+        font-size: 0.95rem;
+      }
+
+      .game-summary {
+        margin: 0;
+        font-size: 0.9rem;
+        font-family: 'Space Grotesk', sans-serif;
+        color: $text-muted;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.5;
+      }
+    }
+}
+
+
+@media (max-width: 768px) {
+
+      .game-card {
+        flex-direction: row;
+  
+        .game-cover {
+          width: 200px;
+          height: auto;
+          border-radius: 8px 0 0 8px;
+        }
+  
+        .game-info {
+          padding: 1rem;
+          text-align: left;
+        }
+    }
+}

@@ -1,0 +1,18 @@
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .games-grid {
+    grid-template-columns: repeat(1, 1fr); // Single column layout for mobile
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .games-grid {
+    grid-template-columns: repeat(2, 1fr); // Two column layout for tablets
+  }
+}
