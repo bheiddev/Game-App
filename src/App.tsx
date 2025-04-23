@@ -5,18 +5,20 @@ import GameDetails from './components/GameDetails';
 import { Game } from './types/game';
 import { fetchTopRatedGames } from './services/api';
 
-//A new variable called App which includes an array games, a loading state, and an error
 const App: React.FC = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-//A useEffect hook that calls the fetchtopratedgames function
+  const [processedCount, setProcessedCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     const loadGames = async () => {
       try {
-        const data = await fetchTopRatedGames();
+        const data = await fetchTopRatedGames((processed, total) => {
+          setProcessedCount(processed);
+          if (total) setTotalCount(total);
+        });
         setGames(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load games');
@@ -32,7 +34,21 @@ const App: React.FC = () => {
     return (
       <div className="main-app">
         <h1>Top Rated Indie Games</h1>
-        <div className="loading">Loading games...</div>
+        <div className="loading">
+          <span className="loading-text">
+            {totalCount > 0 
+              ? `Loading games... ${processedCount} of ${totalCount} processed` 
+              : "Loading games..."}
+          </span>
+          {totalCount > 0 && (
+            <div className="progress-bar">
+              <div 
+                className="progress-fill" 
+                style={{ width: `${(processedCount / totalCount) * 100}%` }}
+              ></div>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -54,4 +70,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App; 
+export default App;
