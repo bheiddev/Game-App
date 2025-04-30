@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Game } from '../types/game';
 import '../App.scss';
 import '../GameDetail.scss';
 import '../GameCard.scss';
 
+//GameDetails component that handles props and states for game details
 interface GameDetailsProps {
   games: Game[];
 }
 
+//Components for game detail page
 const GameDetails: React.FC<GameDetailsProps> = ({ games }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  console.log('Games in GameDetails:', games);
+  console.log('Game ID from URL:', id);
   const game = games.find(g => g.id === Number(id));
+  console.log('Found game:', game);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const formatDate = (dateString: string | undefined) => {
     if (!dateString) return 'Unknown';
