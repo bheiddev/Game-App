@@ -59,8 +59,10 @@ const GameDetails: React.FC<GameDetailsProps> = ({ games }) => {
           />
           <div className="game-header-info">
             <h1>{game.name}</h1>
-            <div className="rating">Rating: {game.rating?.toFixed(1) || 'N/A'}</div>
-            <div className="release-date">Released: {formatDate(game.releaseDate)}</div>
+            {game.rating && (
+              <div className="rating">Rating: {game.rating.toFixed(1)}</div>
+            )}
+            <div className="release-date">Release: {formatDate(game.releaseDate)}</div>
             
             <div className="game-summary-full">
               {game.summary}

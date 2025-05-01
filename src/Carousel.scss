@@ -1,0 +1,60 @@
+$background-color: #FDFBEE;
+$primary-color: #015551;
+$accent-color: #57B4BA;
+$highlight-color: #FE4F2D;
+$card-bg: rgba(1, 85, 81, 0.05);
+$card-hover: rgba(1, 85, 81, 0.1);
+$text-color: #015551;
+$text-muted: rgba(1, 85, 81, 0.7);
+
+@mixin card-shadow {
+  box-shadow: 0 4px 6px rgba(1, 85, 81, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  padding: 12px 0 2px 2px;
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+  margin-right: 10px;
+  width: 200px;
+  border: 1px solid rgba(1, 85, 81, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: $card-bg;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  @include card-shadow;
+}
+
+.carousel-item:hover {
+  transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(1, 85, 81, 0.15);
+      border-color: #FFA500;
+      outline: 2px solid #FFA500;
+}
+
+.carousel-image {
+  width: 100%;
+  height: auto;
+}
+
+.carousel-info {
+  padding: 10px;
+  text-align: center;
+}
+
+.carousel-info h3 {
+  margin: 0 0 5px;
+  font-size: 1.2em;
+}
+
+.carousel-info p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #666;
+} 

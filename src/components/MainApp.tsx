@@ -4,44 +4,114 @@ import '../App.scss';
 import { Game } from '../types/game';
 import '../GameGrid.scss';
 import { fetchTopRatedGames } from '../services/api';
+import { fetchUpcomingGames } from '../services/api';
+import Carousel from './Carousel';
 
 const GAMES_PER_PAGE = 36;
 export { GAMES_PER_PAGE };
 
 //MainApp component that handles fetching and displaying games grid and search
-const MainApp: React.FC<{ games: Game[], setGames: React.Dispatch<React.SetStateAction<Game[]>>, onLoadMore: () => void, resetSearchQuery: () => void }> = ({ games, setGames, onLoadMore, resetSearchQuery }) => {
+const MainApp: React.FC<{ 
+  games: Game[], 
+  setGames: React.Dispatch<React.SetStateAction<Game[]>>, 
+  onLoadMore: () => void, 
+  resetSearchQuery: () => void,
+  page: number 
+}> = ({ games, setGames, onLoadMore, resetSearchQuery, page }) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [upcomingGames, setUpcomingGames] = useState<Game[]>([]);
+  const [releasedGames, setReleasedGames] = useState<Game[]>([]);
+
+  const loadUpcomingGames = async (pageNum: number) => {
+    console.log(`Loading upcoming games for page: ${pageNum}`);
+    setLoading(true);
+    try {
+      const upcomingGames = await fetchUpcomingGames(pageNum * GAMES_PER_PAGE, GAMES_PER_PAGE);
+      console.log('Upcoming games loaded:', upcomingGames);
+      
+      // Update main games state for game details access
+      setGames((prev: Game[]) => {
+        const existingIds = new Set(prev.map((game: Game) => game.id));
+        const uniqueUpcomingGames = upcomingGames.filter((game: Game) => !existingIds.has(game.id));
+        const updatedGames = [...prev, ...uniqueUpcomingGames];
+        console.log('Updated games list with upcoming games:', updatedGames);
+        return updatedGames;
+      });
+      
+      // Also update upcomingGames state for carousel display
+      setUpcomingGames(upcomingGames);
+      
+      setHasMore(upcomingGames.length === GAMES_PER_PAGE);
+    } catch (error) {
+      console.error('Failed to load upcoming games:', error);
+      setHasMore(false);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const loadGames = async (pageNum: number) => {
     console.log(`Loading games for page: ${pageNum}`);
     setLoading(true);
     try {
-      const newGames = await fetchTopRatedGames(pageNum * GAMES_PER_PAGE, GAMES_PER_PAGE);
-      console.log('New games loaded:', newGames);
-      setGames((prev: Game[]) => {
-        const existingIds = new Set(prev.map((game: Game) => game.id));
-        const uniqueNewGames = newGames.filter((game: Game) => !existingIds.has(game.id));
-        const updatedGames = [...prev, ...uniqueNewGames];
-        console.log('Updated games list:', updatedGames);
-        return updatedGames;
-      });
+        const newGames = await fetchTopRatedGames(pageNum * GAMES_PER_PAGE, GAMES_PER_PAGE);
+        console.log('New games loaded:', newGames);
+        
+        // Update main games state for game details access
+        setGames((prev: Game[]) => {
+          const existingIds = new Set(prev.map((game: Game) => game.id));
+          const uniqueNewGames = newGames.filter((game: Game) => !existingIds.has(game.id));
+          const updatedGames = [...prev, ...uniqueNewGames];
+          console.log('Updated games list:', updatedGames);
+          return updatedGames;
+        });
+        
+        // Update released games state for grid display
+        setReleasedGames((prev: Game[]) => {
+          const existingIds = new Set(prev.map((game: Game) => game.id));
+          const uniqueNewGames = newGames.filter((game: Game) => !existingIds.has(game.id));
+          const updatedGames = [...prev, ...uniqueNewGames];
+          return updatedGames;
+        });
+        
       setHasMore(newGames.length === GAMES_PER_PAGE);
     } catch (error) {
       console.error('Failed to load games:', error);
       setHasMore(false);
+      // Display an error message to the user if needed
+      // This could be enhanced to show a UI error notification
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    loadGames(0);
-  }, []);
+    const loadData = async () => {
+      if (page === 0) {
+        // First load upcoming games for carousel
+        await loadUpcomingGames(0);
+        
+        // Then load games for the grid
+        await loadGames(0);
+      } else {
+        // Load more games when page changes
+        await loadGames(page);
+      }
+    };
+    
+    loadData();
+  }, [page]);
 
-  const filteredGames = games.filter((game: Game) => {
+  const filteredGames = releasedGames.filter((game: Game) => {
+    const matchesSearch = game.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
+  });
+
+  const filteredUpcomingGames = upcomingGames.filter((game: Game) => {
     const matchesSearch = game.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesSearch;
   });
@@ -76,6 +146,13 @@ const MainApp: React.FC<{ games: Game[], setGames: React.Dispatch<React.SetState
     }
   };
 
+  const handleLoadMoreAndClearSearch = () => {
+    setSearchQuery('');
+    setSuggestions([]);
+    resetSearchQuery();
+    onLoadMore();
+  };
+
   return (
     <div className="main-app">
       <div className="header">
@@ -106,6 +183,17 @@ const MainApp: React.FC<{ games: Game[], setGames: React.Dispatch<React.SetState
           )}
         </div>
       </div>
+      {(!searchQuery || filteredUpcomingGames.length > 0) && (
+        <>
+          <h2>Most Anticipated</h2>
+          <Carousel games={filteredUpcomingGames} />
+        </>
+      )}
+      {(!searchQuery || filteredGames.length > 0) && (
+        <div>
+          <h2>New Releases</h2>
+        </div>
+      )}
       <div className="games-grid">
         {filteredGames.map((game: Game) => (
           <div 
@@ -139,7 +227,7 @@ const MainApp: React.FC<{ games: Game[], setGames: React.Dispatch<React.SetState
       </div>
       {hasMore && !loading && (
         <div className="load-more-container">
-          <button className="load-more-btn" onClick={onLoadMore}>
+          <button className="load-more-btn" onClick={handleLoadMoreAndClearSearch}>
             Load More
           </button>
         </div>

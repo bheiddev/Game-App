@@ -27,3 +27,28 @@ export const fetchTopRatedGames = async (
     throw error;
   }
 };
+
+export const fetchUpcomingGames = async (
+  offset: number = 0,
+  limit: number = 12
+): Promise<Game[]> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/igdb/upcoming?offset=${offset}&limit=${limit}`);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Backend API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText
+      });
+      throw new Error(`Backend API Error: ${response.status} ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error in fetchTopRatedGames:', error);
+    throw error;
+  }
+};
