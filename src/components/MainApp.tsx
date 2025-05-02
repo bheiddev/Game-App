@@ -6,6 +6,7 @@ import '../GameGrid.scss';
 import { fetchTopRatedGames } from '../services/api';
 import { fetchUpcomingGames } from '../services/api';
 import Carousel from './Carousel';
+import logo from '../images/logo.png';
 
 const GAMES_PER_PAGE = 36;
 export { GAMES_PER_PAGE };
@@ -156,83 +157,94 @@ const MainApp: React.FC<{
   return (
     <div className="main-app">
       <div className="header">
-        <h1>Best New Indie Games</h1>
-        <div className="search-bar-container" style={{ position: 'relative' }}>
-          <input
-            type="text"
-            placeholder="Search games..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="search-bar"
-            autoComplete="off"
-          />
-          {suggestions.length > 0 && (
-            <ul className="autocomplete-list">
-              {suggestions.map((suggestion, idx) => (
-                <li
-                  key={idx}
-                  onClick={() => {
-                    setSearchQuery(suggestion);
-                    setSuggestions([]);
-                  }}
-                >
-                  {suggestion}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-      {(!searchQuery || filteredUpcomingGames.length > 0) && (
-        <>
-          <h2>Most Anticipated</h2>
-          <Carousel games={filteredUpcomingGames} />
-        </>
-      )}
-      {(!searchQuery || filteredGames.length > 0) && (
-        <div>
-          <h2>New Releases</h2>
-        </div>
-      )}
-      <div className="games-grid">
-        {filteredGames.map((game: Game) => (
-          <div 
-            key={game.id} 
-            className="game-card"
-            onClick={() => handleGameClick(game.id)}
-            role="button"
-            tabIndex={0}
-          >
-            {game.coverUrl && (
-              <img 
-                src={game.coverUrl} 
-                alt={game.name}
-                className="game-cover"
-              />
-            )}
-            <div className="game-info">
-              <h2>{game.name}</h2>
-              {game.rating && (
-                <p className="rating">Rating: {game.rating.toFixed(1)}</p>
-              )}
-              {game.releaseDate && (
-                <p className="release-date">Release Date: {formatDate(game.releaseDate)}</p>
-              )}
-              {game.summary && (
-                <p className="game-summary">{game.summary}</p>
-              )}
-            </div>
+        <div className="header-content">
+          <div className="logo-container">
+            <h1>Indie Radar</h1>
+            <img src={logo} alt="Indie Radar Logo" className="header-logo" />
           </div>
-        ))}
-      </div>
-      {hasMore && !loading && (
-        <div className="load-more-container">
-          <button className="load-more-btn" onClick={handleLoadMoreAndClearSearch}>
-            Load More
-          </button>
+          <div className="search-bar-container" style={{ position: 'relative' }}>
+            <input
+              type="text"
+              placeholder="Search games..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="search-bar"
+              autoComplete="off"
+            />
+            {suggestions.length > 0 && (
+              <ul className="autocomplete-list">
+                {suggestions.map((suggestion, idx) => (
+                  <li
+                    key={idx}
+                    onClick={() => {
+                      setSearchQuery(suggestion);
+                      setSuggestions([]);
+                    }}
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
-      )}
+      </div>
+  
+      <div className="body-styles">
       {loading && <p>Loading games...</p>}
+        {(!searchQuery || filteredUpcomingGames.length > 0) && (
+          <>
+            <h2 className="section-heading">Most Anticipated</h2>
+            <Carousel games={filteredUpcomingGames} />
+          </>
+        )}
+  
+        {(!searchQuery || filteredGames.length > 0) && (
+          <div>
+            <h2 className="section-heading">New Releases</h2>
+          </div>
+        )}
+  
+        <div className="games-grid">
+          {filteredGames.map((game: Game) => (
+            <div 
+              key={game.id} 
+              className="game-card"
+              onClick={() => handleGameClick(game.id)}
+              role="button"
+              tabIndex={0}
+            >
+              {game.coverUrl && (
+                <img 
+                  src={game.coverUrl} 
+                  alt={game.name}
+                  className="game-cover"
+                />
+              )}
+              <div className="game-info">
+                <h2>{game.name}</h2>
+                {game.rating && (
+                  <p className="rating">Rating: {game.rating.toFixed(1)}</p>
+                )}
+                {game.releaseDate && (
+                  <p className="release-date">Release Date: {formatDate(game.releaseDate)}</p>
+                )}
+                {game.summary && (
+                  <p className="game-summary">{game.summary}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+  
+        {hasMore && !loading && (
+          <div className="load-more-container">
+            <button className="load-more-btn" onClick={handleLoadMoreAndClearSearch}>
+              Load More
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,3 +1,12 @@
+$background-color: #FDFBEE;
+$primary-color: #015551;
+$accent-color: #57B4BA;
+$highlight-color: #FE4F2D;
+$card-bg: rgba(1, 85, 81, 0.05);
+$card-hover: rgba(1, 85, 81, 0.1);
+$text-color: #015551;
+$text-muted: rgba(1, 85, 81, 0.7);
+
 .games-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
