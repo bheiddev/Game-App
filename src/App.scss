@@ -269,10 +269,15 @@ body {
 
   .header-content {
 
+    .header-logo {
+      height: 40px;
+      width: auto;
+      border-radius: 0px;
+    }
   
   
   h1 {
-    font-size: 1.5rem;
+    font-size: 2.25rem;
   }
 }
 }
@@ -291,6 +296,11 @@ body {
         padding: 1rem;
         gap: 1rem; // Reduce gap on mobile
       
+        .header-logo {
+          height: 40px;
+          width: auto;
+          border-radius: 0px;
+        }
 
       .search-bar-container {
         width: 250px;
@@ -299,7 +309,7 @@ body {
 
       h1 {
         margin: 0;
-        font-size: 2rem;
+        font-size: 2.25rem;
         text-align: center;
       }
 
